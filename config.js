@@ -3,7 +3,7 @@
 window.ANTWERK_CONFIG = {
   // 1) Paste the Google Apps Script Web App URL here (ends with /exec). See README.
   //    While empty, the forms show "not connected, nothing saved" and keep the visitor's data on screen.
-  ENDPOINT_URL: "https://script.google.com/macros/s/AKfycbzfr2NXtSAuIvApVh-dDtzZ99s3f26diA0FKfwTkejZUJ77EIvzYn24YgtYm4EZPUTeEw/exec",
+  ENDPOINT_URL: "https://script.google.com/macros/s/AKfycbxb7DjkKMy8j65O7n-V-nTgmDUKYjecIB9ZdiXvhylgNhQo-4IWFFWxHtwcU9I1d8LRGQ/exec",
 
   // 2) The public web address visitors open (used by make_qr.py to build qr.png).
   PUBLIC_URL: "https://antwerk.immo-spot.be/",
