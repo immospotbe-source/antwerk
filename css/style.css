@@ -585,7 +585,7 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
   position: sticky;
   top: 0;
   z-index: 20;
-  padding: 14px 20px;
+  padding: 18px 20px;
   gap: 0;
   box-shadow: 0 1px 0 rgba(0,0,0,.12);
 }
@@ -594,11 +594,21 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
   gap: 12px;
 }
 .app.portrait-stack.form-full > .brand .logo svg {
-  width: 42px;
+  width: 58px;
 }
 .app.portrait-stack.form-full > .brand .wordmark {
-  font-size: 22px;
+  font-size: 26px;
   text-align: start;
+}
+/* After a little scroll: compact sticky logo */
+.app.portrait-stack.form-full.brand-compact > .brand {
+  padding: 10px 20px;
+}
+.app.portrait-stack.form-full.brand-compact > .brand .logo svg {
+  width: 42px;
+}
+.app.portrait-stack.form-full.brand-compact > .brand .wordmark {
+  font-size: 22px;
 }
 
 .app.portrait-stack > .brand {
