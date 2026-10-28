@@ -463,9 +463,53 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
     "services panel"
     "foot foot";
   min-height: 100vh;
-  height: 100vh;
+  height: auto;
   align-items: stretch;
 }
+.app.portrait-stack > .brand {
+  position: relative;
+}
+.app.portrait-stack.form-full {
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "brand"
+    "panel"
+    "foot";
+}
+.app.portrait-stack.form-full > .services {
+  display: none !important;
+}
+.app.portrait-stack.form-full > .panel {
+  grid-area: panel;
+  padding: 16px 22px 28px;
+  overflow: visible;
+}
+.app.portrait-stack.form-full > .brand .prize,
+.app.portrait-stack.form-full > .brand .event-row,
+.app.portrait-stack.form-full > .brand .tagline {
+  display: none;
+}
+.app.portrait-stack.form-full > .brand {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 14px 20px;
+  gap: 0;
+  box-shadow: 0 1px 0 rgba(0,0,0,.12);
+}
+.app.portrait-stack.form-full > .brand .logo {
+  flex-direction: row;
+  gap: 12px;
+}
+.app.portrait-stack.form-full > .brand .logo svg {
+  width: 42px;
+}
+.app.portrait-stack.form-full > .brand .wordmark {
+  font-size: 22px;
+  text-align: start;
+}
+
 .app.portrait-stack > .brand {
   grid-area: brand;
   flex: none;
