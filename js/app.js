@@ -18,12 +18,42 @@
   // ---------- views ----------
   const VIEWS = ["v-start", "v-service", "v-raffle", "v-thanks"];
   function show(id) {
-    VIEWS.forEach(v => { $(v).hidden = v !== id; });
     const app = document.querySelector(".app");
-    if (app) app.classList.toggle("form-full", id !== "v-start");
-    window.scrollTo({ top: 0 });
-    placeBrandExtras();
+    const next = $(id);
+    const apply = () => {
+      VIEWS.forEach(v => { $(v).hidden = v !== id; });
+      if (app) app.classList.toggle("form-full", id !== "v-start");
+      window.scrollTo({ top: 0 });
+      placeBrandExtras();
+      if (next) {
+        next.classList.remove("view-enter");
+        void next.offsetWidth;
+        next.classList.add("view-enter");
+      }
+      syncBrandScroll();
+    };
+    if (typeof document.startViewTransition === "function") {
+      try { document.startViewTransition(apply); return; } catch (e) {}
+    }
+    apply();
   }
+
+  function syncBrandScroll() {
+    const app = document.querySelector(".app");
+    if (!app) return;
+    if (!app.classList.contains("form-full")) {
+      app.classList.remove("brand-compact");
+      return;
+    }
+    const panel = document.querySelector(".panel");
+    const y = window.scrollY || document.documentElement.scrollTop || 0;
+    const py = panel ? panel.scrollTop : 0;
+    app.classList.toggle("brand-compact", (y + py) > 20);
+  }
+  window.addEventListener("scroll", syncBrandScroll, { passive: true });
+  const panelEl = document.querySelector(".panel");
+  if (panelEl) panelEl.addEventListener("scroll", syncBrandScroll, { passive: true });
+
   $("go-service").onclick = () => show("v-service");
   $("go-raffle").onclick = () => show("v-raffle");
   document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => { clearErrors(); setNote(""); show("v-start"); }));
