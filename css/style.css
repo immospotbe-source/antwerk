@@ -469,16 +469,100 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
 .app.portrait-stack > .brand {
   position: relative;
 }
-.app.portrait-stack.form-full {
-  grid-template-columns: 1fr;
-  grid-template-rows: auto 1fr auto;
-  grid-template-areas:
-    "brand"
-    "panel"
-    "foot";
+/* Smooth Apple-like morph into the form (logo shrink, prize folds, panel expands) */
+.app.portrait-stack {
+  transition: grid-template-columns .48s cubic-bezier(.22, 1, .36, 1);
+}
+.app.portrait-stack > .brand {
+  transition: padding .48s cubic-bezier(.22, 1, .36, 1), gap .48s cubic-bezier(.22, 1, .36, 1), box-shadow .35s ease;
+}
+.app.portrait-stack > .brand .logo {
+  transition: gap .35s cubic-bezier(.22, 1, .36, 1);
+}
+.app.portrait-stack > .brand .logo svg {
+  transition: width .48s cubic-bezier(.22, 1, .36, 1);
+}
+.app.portrait-stack > .brand .wordmark {
+  transition: font-size .48s cubic-bezier(.22, 1, .36, 1);
+}
+.app.portrait-stack > .brand .prize,
+.app.portrait-stack > .brand .event-row,
+.app.portrait-stack > .brand .tagline {
+  overflow: hidden;
+  max-height: 220px;
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity .3s ease, transform .42s cubic-bezier(.22, 1, .36, 1), max-height .42s cubic-bezier(.22, 1, .36, 1), margin .42s cubic-bezier(.22, 1, .36, 1), padding .42s cubic-bezier(.22, 1, .36, 1), border-width .3s ease;
+}
+.app.portrait-stack > .services {
+  min-width: 0;
+  transition: opacity .32s ease, transform .42s cubic-bezier(.22, 1, .36, 1), padding .42s cubic-bezier(.22, 1, .36, 1), max-height .42s cubic-bezier(.22, 1, .36, 1);
+}
+.app.portrait-stack > .panel {
+  transition: padding .42s cubic-bezier(.22, 1, .36, 1);
+}
+.view.view-enter {
+  animation: antwerkViewIn .42s cubic-bezier(.22, 1, .36, 1) both;
+}
+@keyframes antwerkViewIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app.portrait-stack,
+  .app.portrait-stack > .brand,
+  .app.portrait-stack > .brand .logo,
+  .app.portrait-stack > .brand .logo svg,
+  .app.portrait-stack > .brand .wordmark,
+  .app.portrait-stack > .brand .prize,
+  .app.portrait-stack > .brand .event-row,
+  .app.portrait-stack > .brand .tagline,
+  .app.portrait-stack > .services,
+  .app.portrait-stack > .panel {
+    transition: none !important;
+  }
+  .view.view-enter { animation: none !important; }
+}
+
+/* Tablet/iPad portrait: collapse the services column; panel grows full width */
+@media (min-width: 701px) {
+  .app.portrait-stack.form-full {
+    grid-template-columns: 0fr 1fr;
+    grid-template-rows: auto 1fr auto;
+    grid-template-areas:
+      "brand brand"
+      "services panel"
+      "foot foot";
+  }
+}
+/* Phone: stay single column; fold services away */
+@media (max-width: 700px) {
+  .app.portrait-stack.form-full {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto auto;
+    grid-template-areas:
+      "brand"
+      "panel"
+      "services"
+      "foot";
+  }
+  .app.portrait-stack.form-full > .services {
+    max-height: 0 !important;
+    opacity: 0;
+    transform: translateY(-8px);
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    overflow: hidden;
+    pointer-events: none;
+  }
 }
 .app.portrait-stack.form-full > .services {
-  display: none !important;
+  opacity: 0;
+  transform: translateX(-10px);
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  overflow: hidden;
+  pointer-events: none;
 }
 .app.portrait-stack.form-full > .panel {
   grid-area: panel;
@@ -488,7 +572,14 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
 .app.portrait-stack.form-full > .brand .prize,
 .app.portrait-stack.form-full > .brand .event-row,
 .app.portrait-stack.form-full > .brand .tagline {
-  display: none;
+  opacity: 0;
+  transform: translateY(-10px);
+  max-height: 0 !important;
+  margin: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-width: 0;
+  pointer-events: none;
 }
 .app.portrait-stack.form-full > .brand {
   position: sticky;
