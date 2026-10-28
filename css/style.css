@@ -184,8 +184,122 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
 
 .thanks-flyer{display:block;width:100%;max-width:420px;height:auto;margin:14px auto 6px;border-radius:14px;border:1px solid rgba(0,82,70,.12);box-shadow:0 8px 24px rgba(0,0,0,.08)}
 
-/* === iPad start layout: centered logo, balanced split, equal path boxes === */
+/* === Tablet/phone start: centered brand; tablet uses fixed split, phone scrolls === */
+
+/* Shared: center brand + equal path boxes under 1100px */
 @media (max-width: 1100px) {
+  .brand {
+    align-items: center;
+    text-align: center;
+  }
+  .logo {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  .event-row {
+    justify-content: center;
+  }
+  .prize {
+    max-width: 520px;
+    width: 100%;
+    margin-inline: auto;
+    text-align: start;
+  }
+  .brand-foot {
+    width: 100%;
+    max-width: 520px;
+    margin-inline: auto;
+    justify-content: center;
+  }
+  .paths {
+    width: 100%;
+    margin-inline: auto;
+  }
+  .path {
+    align-content: center;
+  }
+}
+
+/* Phone: natural height, no viewport lock, no clipping */
+@media (max-width: 700px) {
+  .app {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    min-height: 0;
+    height: auto;
+  }
+  .brand {
+    gap: 14px;
+    padding: 22px 18px 18px;
+    overflow: visible;
+  }
+  .logo svg {
+    width: 72px;
+  }
+  .wordmark {
+    font-size: 32px;
+  }
+  .tagline {
+    font-size: 15px;
+    max-width: 28ch;
+    margin-inline: auto;
+  }
+  .antwerk-logo {
+    width: 120px;
+  }
+  .prize {
+    padding: 12px 14px;
+  }
+  .brand-foot {
+    margin-top: 4px;
+  }
+  .panel {
+    justify-content: flex-start;
+    padding: 16px 16px 28px;
+    overflow: visible;
+  }
+  .paths {
+    gap: 12px;
+    max-width: none;
+  }
+  .path {
+    min-height: 112px;
+    padding: 14px 14px;
+    gap: 4px 12px;
+    border-radius: 14px;
+  }
+  .path b {
+    font-size: 17px;
+    line-height: 1.25;
+  }
+  .path .d {
+    font-size: 13.5px;
+  }
+  .path .ticket {
+    font-size: 11.5px;
+    padding: 3px 8px;
+    margin-top: 4px;
+    max-width: 100%;
+    white-space: normal;
+    text-align: start;
+  }
+  .path.main .ticket {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+  .path .arrow {
+    width: 36px;
+    height: 36px;
+  }
+  .path .arrow svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* Tablet / iPad portrait: balanced split, bigger logo, equal boxes */
+@media (min-width: 701px) and (max-width: 1100px) {
   html, body, .app {
     height: 100%;
     min-height: 100%;
@@ -197,17 +311,10 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
     height: 100vh;
   }
   .brand {
-    align-items: center;
-    text-align: center;
     justify-content: center;
     gap: 16px;
     padding: 28px 28px 20px;
     overflow: hidden;
-  }
-  .logo {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
   }
   .logo svg {
     width: 96px;
@@ -220,24 +327,13 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
     max-width: 30ch;
     margin-inline: auto;
   }
-  .event-row {
-    justify-content: center;
-  }
   .antwerk-logo {
     width: 140px;
   }
   .prize {
-    max-width: 520px;
-    width: 100%;
-    margin-inline: auto;
-    text-align: start;
     padding: 12px 14px;
   }
   .brand-foot {
-    width: 100%;
-    max-width: 520px;
-    margin-inline: auto;
-    justify-content: center;
     margin-top: 4px;
   }
   .panel {
@@ -248,15 +344,12 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
   .paths {
     gap: 14px;
     max-width: 560px;
-    width: 100%;
-    margin-inline: auto;
   }
   .path {
     min-height: 132px;
     padding: 16px 18px;
     gap: 5px 14px;
     border-radius: 15px;
-    align-content: center;
   }
   .path b {
     font-size: 18px;
