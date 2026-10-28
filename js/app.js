@@ -31,7 +31,9 @@
     document.querySelectorAll("[data-i18n-ph]").forEach(el => { el.placeholder = T[lang][el.dataset.i18nPh]; });
     LANGS.forEach(l => $("lang-" + l).setAttribute("aria-pressed", lang === l));
     document.querySelectorAll("[data-doc]").forEach(a => { a.href = a.dataset.doc + ".html?lang=" + (lang === "he" ? "en" : lang); });
-    fillPrice(); clearErrors(); renderNote();
+    fillPrice(); fillType(); clearErrors(); renderNote();
+    // hide empty path descriptions
+    document.querySelectorAll(".path .d").forEach(el => { el.hidden = !el.textContent.trim(); });
     if (lastThanks && !$("v-thanks").hidden) renderThanks(lastThanks);
   }
   function setLang(l) { lang = l; applyLang(); }
@@ -39,62 +41,64 @@
 
   // ---------- service form ----------
   const PRICE_VALUE = ["< € 200.000", "€ 200.000 – 300.000", "€ 300.000 – 400.000", "€ 400.000 – 500.000", "€ 500.000 – 750.000", "€ 750.000 – 1.000.000", "> € 1.000.000"];
+  const TYPE_VALUE = ["appartement", "huis", "opbrengsteigendom"];
+  const TYPE_I18N = { appartement: "tApt", huis: "tHouse", opbrengsteigendom: "tInvest" };
   const interests = () => [...document.querySelectorAll("input[name=interest]:checked")].map(el => el.value);
-  const propertyTypes = () => [...document.querySelectorAll("input[name=ptype]:checked")].map(el => el.value);
   function hasSvc(...keys) { const s = interests(); return keys.some(k => s.includes(k)); }
+  function selectedType() { const el = $("ptype"); return el ? el.value : ""; }
 
   function syncPropertyFields() {
+    // Type pand: only for kopen / verkopen (NOT verhuren). Price: only kopen. No regio. No aantal panden.
     const showBuy = hasSvc("kopen");
-    const showType = hasSvc("kopen", "verkopen", "verhuren");
-    const showCount = hasSvc("beheer");
-    const showAny = showBuy || showType || showCount;
+    const showType = hasSvc("kopen", "verkopen");
+    const showAny = showBuy || showType;
     $("f-property").hidden = !showAny;
     $("f-ptype").hidden = !showType;
     $("f-price").hidden = !showBuy;
-    $("f-pcount").hidden = !showCount;
-    $("f-region").hidden = !showBuy;
-    if (!showType) document.querySelectorAll("input[name=ptype]").forEach(c => { c.checked = false; });
-    if (!showBuy) { $("price").value = ""; $("region").value = ""; }
-    if (!showCount) $("pcount").value = "";
+    if ($("f-pcount")) $("f-pcount").hidden = true;
+    if ($("f-region")) $("f-region").hidden = true;
+    if (!showType && $("ptype")) $("ptype").value = "";
+    if (!showBuy && $("price")) $("price").value = "";
   }
 
   function fillPrice() {
-    $("pcount").placeholder = t("countPh");
-    const sel = $("price"), prev = sel.value;
+    const sel = $("price"); if (!sel) return;
+    const prev = sel.value;
     sel.innerHTML = "";
     sel.add(new Option(t("choosePrice"), ""));
     PRICE_VALUE.forEach(v => sel.add(new Option(v, v)));
     sel.value = PRICE_VALUE.includes(prev) ? prev : "";
-    $("price-label").textContent = t("priceValue");
-    if ($("pcount-label")) $("pcount-label").textContent = t("priceCount");
+    if ($("price-label")) $("price-label").textContent = t("priceValue");
   }
+
+  function fillType() {
+    const sel = $("ptype"); if (!sel) return;
+    const prev = sel.value;
+    sel.innerHTML = "";
+    sel.add(new Option(t("chooseType"), ""));
+    TYPE_VALUE.forEach(v => sel.add(new Option(t(TYPE_I18N[v]), v)));
+    sel.value = TYPE_VALUE.includes(prev) ? prev : "";
+    const lab = document.querySelector("#f-ptype > label");
+    if (lab) lab.textContent = t("ptype");
+  }
+
   document.querySelectorAll("input[name=interest]").forEach(c => c.addEventListener("change", () => {
-    syncPropertyFields(); fillPrice(); setErr("interest", ""); setErr("ptype", ""); setErr("price", ""); setErr("pcount", "");
+    syncPropertyFields(); fillPrice(); fillType(); setErr("interest", ""); setErr("ptype", ""); setErr("price", "");
   }));
 
   function setErr(k, msg) { const e = $("e-" + k); if (e) e.textContent = msg; const f = $("f-" + k); if (f) f.classList.toggle("invalid", !!msg); }
-  const QS = ["q1", "q2", "q3", "q4"], QFIELDS = { q1: "sold", q2: "rented", q3: "managed", q4: "entrants" };
-  const ERR_KEYS = ["interest", "first", "last", "phone", "email", "price", "pcount", "ptype", "consent", "rf-first", "rf-last", "rf-phone", "rf-email", "rf-consent",
-    ...["rq"].flatMap(p => [...QS.map(q => `${p}-${q}`), `${p}-g`])];
+  const ERR_KEYS = ["interest", "first", "last", "phone", "email", "price", "ptype", "consent", "rf-first", "rf-last", "rf-phone", "rf-email", "rf-consent", "rq-q4"];
   function buildQuiz() {
+    // Contest quiz: ONLY question 2 (participants / entrants). q1–q3 group removed.
     document.querySelectorAll(".quiz").forEach(box => {
       const p = box.dataset.prefix;
-      const box3 = (q, k) => `<div class="field qbox" id="f-${p}-${q}"><label for="${p}-${q}" data-i18n="${k}"></label>` +
-        `<input type="text" inputmode="numeric" id="${p}-${q}" autocomplete="off"><div class="err" id="e-${p}-${q}"></div></div>`;
-      box.innerHTML = `<div class="quiz-head"><span class="ic"><svg><use href="#i-cash"/></svg></span><div><b data-i18n="quizT"></b><small data-i18n="${p === "sq" ? "quizDopt" : "quizD"}"></small></div></div>` +
-        `<div class="qgroup"><div class="qtitle" data-i18n="qHead"></div>` +
-        `<div class="qboxes">${box3("q1", "qSold")}${box3("q2", "qRented")}${box3("q3", "qManaged")}</div>` +
-        `<div class="err" id="e-${p}-g"></div></div>` +
+      box.innerHTML =
+        `<div class="quiz-head"><span class="ic"><svg><use href="#i-cash"/></svg></span><div><b data-i18n="quizT"></b><small data-i18n="quizD"></small></div></div>` +
         `<div class="field" id="f-${p}-q4"><label class="qtitle" for="${p}-q4" data-i18n="q4b"></label>` +
         `<input type="text" inputmode="numeric" id="${p}-q4" autocomplete="off" class="qone"><div class="err" id="e-${p}-q4"></div></div>`;
     });
   }
   const toInt = v => { v = String(v).replace(/[\s.,]/g, ""); return /^\d{1,6}$/.test(v) ? parseInt(v, 10) : null; };
-  function readQuiz(p, bad) {
-    const out = {};
-    QS.forEach(q => { const n = toInt($(`${p}-${q}`).value); if (n === null) bad.push([`${p}-${q}`, t("eQuiz")]); out[QFIELDS[q]] = n; });
-    return out;
-  }
   function clearErrors() { ERR_KEYS.forEach(k => setErr(k, "")); }
   const validEmail = e => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e);
   const validPhone = p => p.replace(/\D/g, "").length >= 8;
@@ -103,45 +107,29 @@
   function validateService() {
     clearErrors();
     const svcs = interests();
-    const types = propertyTypes();
-    const needType = hasSvc("kopen", "verkopen", "verhuren");
+    const type = selectedType();
+    const needType = hasSvc("kopen", "verkopen");
     const needPrice = hasSvc("kopen");
-    const needCount = hasSvc("beheer");
-    const cnt = toInt($("pcount").value);
     const d = {
       path: "services", services: svcs, firstName: $("first").value.trim(), lastName: $("last").value.trim(),
       phone: $("phone").value.trim(), email: $("email").value.trim(),
-      priceType: needCount && !needPrice ? "count" : "value",
-      price: needCount && !needPrice ? (cnt ? String(cnt) : "") : (needPrice ? $("price").value : ""),
-      propertyTypes: needType ? types : [],
-      propertyType: needType ? types.join(",") : "",
-      region: needPrice ? $("region").value.trim() : "",
+      priceType: "value",
+      price: needPrice ? $("price").value : "",
+      propertyTypes: needType && type ? [type] : [],
+      propertyType: needType ? type : "",
+      propertyCount: "",
+      region: "",
       timing: "",
       remarks: $("notes").value.trim(), consent: $("consent").checked, quiz: null, website: $("hp1").value
     };
-    // If both Kopen and Beheer: send price for buy + store count in remarks prefix? Better: priceType count when only beheer;
-    // when both, send price as value and also append count via a dedicated field the sheet already has as price class.
-    // Sheet has one "price class" column. For Beheer-only use "N panden". For Kopen+Beheer send price and put count in remarks note.
-    if (needCount && needPrice) {
-      d.priceType = "value";
-      d.price = $("price").value;
-      d.propertyCount = cnt || "";
-    } else if (needCount) {
-      d.priceType = "count";
-      d.price = cnt ? String(cnt) : "";
-      d.propertyCount = cnt || "";
-    } else {
-      d.propertyCount = "";
-    }
     const bad = [];
     if (!svcs.length) bad.push(["interest", t("eInterest")]);
     if (!d.firstName) bad.push(["first", t("eFirst")]);
     if (!d.lastName) bad.push(["last", t("eLast")]);
     if (!validPhone(d.phone)) bad.push(["phone", t("ePhone")]);
     if (!validEmail(d.email)) bad.push(["email", t("eEmail")]);
-    if (needType && !types.length) bad.push(["ptype", t("ePtype")]);
+    if (needType && !type) bad.push(["ptype", t("ePtype")]);
     if (needPrice && !d.price) bad.push(["price", t("ePrice")]);
-    if (needCount && !cnt) bad.push(["pcount", t("eCount")]);
     if (!d.consent) bad.push(["consent", t("eConsent")]);
     bad.forEach(([k, m]) => setErr(k, m));
     if (bad.length) { focusFirst(bad); return null; }
@@ -156,11 +144,11 @@
     if (!d.lastName) bad.push(["rf-last", t("eLast")]);
     if (!validPhone(d.phone)) bad.push(["rf-phone", t("ePhone")]);
     if (!validEmail(d.email)) bad.push(["rf-email", t("eEmail")]);
-    d.quiz = readQuiz("rq", bad);
-    const groupBad = ["rq-q1", "rq-q2", "rq-q3"].some(k => bad.some(x => x[0] === k));
+    const entrants = toInt($("rq-q4").value);
+    if (entrants === null) bad.push(["rq-q4", t("eQuiz")]);
+    d.quiz = { sold: "", rented: "", managed: "", entrants: entrants };
     if (!d.consent) bad.push(["rf-consent", t("eRfConsent")]);
     bad.forEach(([k, m]) => setErr(k, m));
-    if (groupBad) $("e-rq-g").textContent = t("eQuiz3");
     if (bad.length) { focusFirst(bad); return null; }
     return d;
   }
