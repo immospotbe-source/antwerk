@@ -259,4 +259,36 @@
     }, 350);
   });
 
+
+  // Portrait: services + lang/rules under the path boxes; landscape/desktop: back in brand
+  function placeBrandExtras() {
+    const app = document.querySelector(".app");
+    const brand = document.querySelector(".brand");
+    const panel = document.querySelector(".panel");
+    const services = document.querySelector(".services");
+    const foot = document.querySelector(".brand-foot");
+    if (!app || !brand || !panel || !services || !foot) return;
+    const portraitStack = window.matchMedia("(max-width: 1100px) and (orientation: portrait)").matches
+      || window.matchMedia("(max-width: 700px)").matches;
+    if (portraitStack) {
+      if (services.parentElement !== app || services.previousElementSibling !== panel) {
+        panel.after(services);
+      }
+      if (foot.parentElement !== app || foot.previousElementSibling !== services) {
+        services.after(foot);
+      }
+      app.classList.add("portrait-stack");
+    } else {
+      const prize = brand.querySelector(".prize");
+      if (prize) {
+        if (services.parentElement !== brand) prize.after(services);
+        if (foot.parentElement !== brand) brand.appendChild(foot);
+      }
+      app.classList.remove("portrait-stack");
+    }
+  }
+  placeBrandExtras();
+  window.addEventListener("resize", placeBrandExtras);
+  window.addEventListener("orientationchange", () => setTimeout(placeBrandExtras, 50));
+
 })();
