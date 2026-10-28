@@ -36,7 +36,7 @@
 
     <div class="prize">
       <div class="ic"><svg><use href="#i-cash"></use></svg></div>
-      <div><b data-i18n="prizeT">Win een Shabbat-uitje voor twee in Villa Altol</b><small data-i18n="prizeD">Een Shabbat-uitje voor twee in Villa Altol. Schrijf u in en maak kans. Gratis deelname, geen aankoop nodig.</small></div>
+      <div><b data-i18n="prizeT">Win een Shabbat-uitje voor twee in Villa Altol</b><small data-i18n="prizeD">Schrijf u in en maak kans. Gratis deelname.</small></div>
     </div>
 
     <ul class="services">
@@ -60,18 +60,17 @@
     <section class="view" id="v-start">
       <div class="view-head">
         <h2 data-i18n="startT">Waarvoor wilt u zich inschrijven?</h2>
-        <p data-i18n="startD">Kies wat bij u past. Het duurt minder dan een minuut.</p>
       </div>
       <div class="paths">
         <button type="button" class="path main" id="go-service">
-          <b data-i18n="pathAT">Ik wil gebruikmaken van de diensten van Immo Spot</b>
+          <b data-i18n="pathAT">Klaar voor uw volgende stap in vastgoed?</b>
           <span class="d" data-i18n="pathAD">Laat uw gegevens achter en wij contacteren u spoedig.</span>
           <span class="ticket"><svg><use href="#i-ticket"></use></svg><span data-i18n="pathATag">U doet ook automatisch mee aan de wedstrijd</span></span>
           <span class="arrow"><svg><use href="#i-arrow"></use></svg></span>
         </button>
         <button type="button" class="path" id="go-raffle">
           <b data-i18n="pathBT">Ik doe alleen mee aan de wedstrijd</b>
-          <span class="d" data-i18n="pathBD">Uw naam, contactgegevens en 2 korte vragen. We contacteren u enkel als u wint.</span>
+          <span class="d" data-i18n="pathBD"></span>
           <span class="ticket"><svg><use href="#i-cash"></use></svg><span data-i18n="pathBTag">Kans op een Shabbat-uitje voor twee</span></span>
           <span class="arrow"><svg><use href="#i-arrow"></use></svg></span>
         </button>
@@ -109,18 +108,17 @@
         <fieldset id="f-property" hidden>
           <legend data-i18n="qProperty">Over het pand</legend>
           <div class="field" id="f-ptype" hidden>
-            <label data-i18n="ptype">Type pand *</label>
-            <div class="chips" id="ptype-chips">
-              <label class="chip"><input type="checkbox" name="ptype" value="appartement" id="pt-apt"><span data-i18n="tApt">Appartement</span></label>
-              <label class="chip"><input type="checkbox" name="ptype" value="huis" id="pt-huis"><span data-i18n="tHouse">Huis</span></label>
-              <label class="chip"><input type="checkbox" name="ptype" value="opbrengsteigendom" id="pt-invest"><span data-i18n="tInvest">Opbrengsteigendom</span></label>
-            </div>
+            <label for="ptype" data-i18n="ptype">Type pand *</label>
+            <select id="ptype">
+              <option value="">Kies een type…</option>
+              <option value="appartement">Appartement</option>
+              <option value="huis">Huis</option>
+              <option value="opbrengsteigendom">Opbrengsteigendom</option>
+            </select>
             <div class="err" id="e-ptype"></div>
           </div>
           <div class="grid2">
             <div class="field" id="f-price" hidden><label for="price" id="price-label" data-i18n="priceValue">Prijsklasse *</label><select id="price"><option value="">Kies een prijsklasse…</option><option value="&lt; € 200.000">&lt; € 200.000</option><option value="€ 200.000 – 300.000">€ 200.000 – 300.000</option><option value="€ 300.000 – 400.000">€ 300.000 – 400.000</option><option value="€ 400.000 – 500.000">€ 400.000 – 500.000</option><option value="€ 500.000 – 750.000">€ 500.000 – 750.000</option><option value="€ 750.000 – 1.000.000">€ 750.000 – 1.000.000</option><option value="&gt; € 1.000.000">&gt; € 1.000.000</option></select><div class="err" id="e-price"></div></div>
-            <div class="field" id="f-pcount" hidden><label for="pcount" id="pcount-label" data-i18n="priceCount">Aantal panden *</label><input type="text" inputmode="numeric" id="pcount" autocomplete="off" placeholder="Bv. 3"><div class="err" id="e-pcount"></div></div>
-            <div class="field" id="f-region" hidden><label for="region" data-i18n="region">Gemeente of regio</label><input type="text" id="region" placeholder="Antwerpen, Berchem, Mortsel…"></div>
           </div>
           <input type="hidden" id="timing" value="">
         </fieldset>
@@ -145,7 +143,7 @@
       <div class="view-head">
         <button type="button" class="back" data-back="" data-i18n="back">← Terug</button>
         <h2 data-i18n="raffleT">Doe mee aan de wedstrijd</h2>
-        <p data-i18n="raffleD">Beantwoord 2 korte vragen en maak kans op een Shabbat-uitje voor twee in Villa Altol.</p>
+        <p data-i18n="raffleD">Beantwoord 1 korte vraag en maak kans op een Shabbat-uitje voor twee in Villa Altol.</p>
       </div>
       <form id="raffle-form" novalidate="">
         <div class="grid2">
