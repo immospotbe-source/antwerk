@@ -39,32 +39,43 @@
 
   // ---------- service form ----------
   const PRICE_VALUE = ["< € 200.000", "€ 200.000 – 300.000", "€ 300.000 – 400.000", "€ 400.000 – 500.000", "€ 500.000 – 750.000", "€ 750.000 – 1.000.000", "> € 1.000.000"];
-  const PRICE_RENT = ["< € 800 / mnd", "€ 800 – 1.000 / mnd", "€ 1.000 – 1.300 / mnd", "€ 1.300 – 1.700 / mnd", "€ 1.700 – 2.500 / mnd", "> € 2.500 / mnd"];
-  const interest = () => (document.querySelector("input[name=interest]:checked") || {}).value || "";
-  let priceMode = "value";
+  const interests = () => [...document.querySelectorAll("input[name=interest]:checked")].map(el => el.value);
+  const propertyTypes = () => [...document.querySelectorAll("input[name=ptype]:checked")].map(el => el.value);
+  function hasSvc(...keys) { const s = interests(); return keys.some(k => s.includes(k)); }
+
+  function syncPropertyFields() {
+    const showBuy = hasSvc("kopen");
+    const showType = hasSvc("kopen", "verkopen", "verhuren");
+    const showCount = hasSvc("beheer");
+    const showAny = showBuy || showType || showCount;
+    $("f-property").hidden = !showAny;
+    $("f-ptype").hidden = !showType;
+    $("f-price").hidden = !showBuy;
+    $("f-pcount").hidden = !showCount;
+    $("f-region").hidden = !showBuy;
+    if (!showType) document.querySelectorAll("input[name=ptype]").forEach(c => { c.checked = false; });
+    if (!showBuy) { $("price").value = ""; $("region").value = ""; }
+    if (!showCount) $("pcount").value = "";
+  }
+
   function fillPrice() {
-    const i = interest();
-    // Management asks for the number of properties; letting asks for monthly rent; buying/selling for a price class.
-    priceMode = i === "beheer" ? "count" : i === "verhuren" ? "rent" : "value";
-    const count = priceMode === "count";
-    $("price").hidden = count; $("pcount").hidden = !count;
-    $("price-label").htmlFor = count ? "pcount" : "price";
     $("pcount").placeholder = t("countPh");
     const sel = $("price"), prev = sel.value;
-    const list = priceMode === "rent" ? PRICE_RENT : PRICE_VALUE;   // option VALUE stays Dutch/canonical, label is localised
     sel.innerHTML = "";
     sel.add(new Option(t("choosePrice"), ""));
-    list.forEach(v => sel.add(new Option(priceMode === "rent" ? v.replace("/ mnd", t("perMonth")) : v, v)));
-    sel.value = list.includes(prev) ? prev : "";
-    $("price-label").textContent = { count: t("priceCount"), rent: t("priceRent"), value: t("priceValue") }[priceMode];
+    PRICE_VALUE.forEach(v => sel.add(new Option(v, v)));
+    sel.value = PRICE_VALUE.includes(prev) ? prev : "";
+    $("price-label").textContent = t("priceValue");
+    if ($("pcount-label")) $("pcount-label").textContent = t("priceCount");
   }
-  document.querySelectorAll("input[name=interest]").forEach(c => c.addEventListener("change", () => { fillPrice(); setErr("interest", ""); }));
-  $("sq-join").addEventListener("change", () => { $("sq-quiz").hidden = !$("sq-join").checked; if (!$("sq-join").checked) clearErrors(); });
+  document.querySelectorAll("input[name=interest]").forEach(c => c.addEventListener("change", () => {
+    syncPropertyFields(); fillPrice(); setErr("interest", ""); setErr("ptype", ""); setErr("price", ""); setErr("pcount", "");
+  }));
 
   function setErr(k, msg) { const e = $("e-" + k); if (e) e.textContent = msg; const f = $("f-" + k); if (f) f.classList.toggle("invalid", !!msg); }
   const QS = ["q1", "q2", "q3", "q4"], QFIELDS = { q1: "sold", q2: "rented", q3: "managed", q4: "entrants" };
-  const ERR_KEYS = ["interest", "first", "last", "phone", "email", "price", "consent", "rf-first", "rf-last", "rf-phone", "rf-email", "rf-consent",
-    ...["rq", "sq"].flatMap(p => [...QS.map(q => `${p}-${q}`), `${p}-g`])];
+  const ERR_KEYS = ["interest", "first", "last", "phone", "email", "price", "pcount", "ptype", "consent", "rf-first", "rf-last", "rf-phone", "rf-email", "rf-consent",
+    ...["rq"].flatMap(p => [...QS.map(q => `${p}-${q}`), `${p}-g`])];
   function buildQuiz() {
     document.querySelectorAll(".quiz").forEach(box => {
       const p = box.dataset.prefix;
@@ -91,26 +102,48 @@
 
   function validateService() {
     clearErrors();
-    const i = interest();
+    const svcs = interests();
+    const types = propertyTypes();
+    const needType = hasSvc("kopen", "verkopen", "verhuren");
+    const needPrice = hasSvc("kopen");
+    const needCount = hasSvc("beheer");
     const cnt = toInt($("pcount").value);
     const d = {
-      path: "services", services: i ? [i] : [], firstName: $("first").value.trim(), lastName: $("last").value.trim(),
+      path: "services", services: svcs, firstName: $("first").value.trim(), lastName: $("last").value.trim(),
       phone: $("phone").value.trim(), email: $("email").value.trim(),
-      priceType: priceMode, price: priceMode === "count" ? (cnt ? String(cnt) : "") : $("price").value,
-      propertyType: $("ptype").value, region: $("region").value.trim(), timing: $("timing").value,
+      priceType: needCount && !needPrice ? "count" : "value",
+      price: needCount && !needPrice ? (cnt ? String(cnt) : "") : (needPrice ? $("price").value : ""),
+      propertyTypes: needType ? types : [],
+      propertyType: needType ? types.join(",") : "",
+      region: needPrice ? $("region").value.trim() : "",
+      timing: "",
       remarks: $("notes").value.trim(), consent: $("consent").checked, quiz: null, website: $("hp1").value
     };
+    // If both Kopen and Beheer: send price for buy + store count in remarks prefix? Better: priceType count when only beheer;
+    // when both, send price as value and also append count via a dedicated field the sheet already has as price class.
+    // Sheet has one "price class" column. For Beheer-only use "N panden". For Kopen+Beheer send price and put count in remarks note.
+    if (needCount && needPrice) {
+      d.priceType = "value";
+      d.price = $("price").value;
+      d.propertyCount = cnt || "";
+    } else if (needCount) {
+      d.priceType = "count";
+      d.price = cnt ? String(cnt) : "";
+      d.propertyCount = cnt || "";
+    } else {
+      d.propertyCount = "";
+    }
     const bad = [];
-    if (!i) bad.push(["interest", t("eInterest")]);
+    if (!svcs.length) bad.push(["interest", t("eInterest")]);
     if (!d.firstName) bad.push(["first", t("eFirst")]);
     if (!d.lastName) bad.push(["last", t("eLast")]);
     if (!validPhone(d.phone)) bad.push(["phone", t("ePhone")]);
     if (!validEmail(d.email)) bad.push(["email", t("eEmail")]);
-    if (!d.price) bad.push(["price", priceMode === "count" ? t("eCount") : t("ePrice")]);
-    if ($("sq-join").checked) d.quiz = readQuiz("sq", bad);   // optional questions: only validated when ticked
+    if (needType && !types.length) bad.push(["ptype", t("ePtype")]);
+    if (needPrice && !d.price) bad.push(["price", t("ePrice")]);
+    if (needCount && !cnt) bad.push(["pcount", t("eCount")]);
     if (!d.consent) bad.push(["consent", t("eConsent")]);
     bad.forEach(([k, m]) => setErr(k, m));
-    if (["sq-q1", "sq-q2", "sq-q3"].some(k => bad.some(x => x[0] === k))) $("e-sq-g").textContent = t("eQuiz3");
     if (bad.length) { focusFirst(bad); return null; }
     return d;
   }
@@ -200,8 +233,10 @@
     $("thanks-title").textContent = svc ? t("thanks")(s.name) : t("luck")(s.name);
     $("thanks-body").textContent = svc ? t("thanksBody") : t("rfBody");
     $("thanks-dup").hidden = !s.duplicate; $("thanks-dup").textContent = s.duplicate ? t("dupNote") : "";
-    $("thanks-steps").hidden = !svc;
-    $("thanks-raffle").textContent = svc ? t("thanksRaffle") : t("rfRaffle");
+    $("thanks-steps").hidden = true;   // never show the 3 steps
+    const raffleTxt = svc ? t("thanksRaffle") : t("rfRaffle");
+    $("thanks-raffle").textContent = raffleTxt || "";
+    $("thanks-raffle-box").hidden = !raffleTxt;
     $("thanks-end").textContent = svc ? t("thanksEnd") : t("rfEnd");
     if (secondsLeft != null) $("countdown").textContent = t("countdown")(secondsLeft);
   }
@@ -213,12 +248,14 @@
   }
   function resetAll(auto) {
     clearInterval(timer); lastThanks = null; secondsLeft = null; noteKey = "";
-    $("lead-form").reset(); $("raffle-form").reset(); $("sq-quiz").hidden = true; $("countdown").textContent = "";
+    $("lead-form").reset(); $("raffle-form").reset(); $("countdown").textContent = "";
+    syncPropertyFields();
     if (auto && lang !== DEFAULT_LANG) lang = DEFAULT_LANG;   // next visitor starts in the default language
     applyLang(); show("v-start");
   }
   $("again").onclick = () => resetAll(false);
 
   buildQuiz();
+  syncPropertyFields();
   applyLang();
 })();
