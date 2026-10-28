@@ -34,9 +34,6 @@
 
     <div class="event-row"><img class="antwerk-logo" src="assets/antwerk_logo.png" alt="Antwerk" width="128" height="42"><div class="event"><span data-i18n="eventDate">4 nov 2026</span></div></div>
 
-    <h1 data-i18n="headline">Klaar voor uw volgende stap in vastgoed?</h1>
-    <p class="lede" data-i18n="lede">Laat uw gegevens achter. Een makelaar van Immo Spot neemt persoonlijk contact met u op.</p>
-
     <div class="prize">
       <div class="ic"><svg><use href="#i-cash"></use></svg></div>
       <div><b data-i18n="prizeT">Win een Shabbat-uitje voor twee in Villa Altol</b><small data-i18n="prizeD">Een Shabbat-uitje voor twee in Villa Altol. Schrijf u in en maak kans. Gratis deelname, geen aankoop nodig.</small></div>
@@ -68,8 +65,8 @@
       <div class="paths">
         <button type="button" class="path main" id="go-service">
           <b data-i18n="pathAT">Ik wil gebruikmaken van de diensten van Immo Spot</b>
-          <span class="d" data-i18n="pathAD">Kopen, verkopen, verhuren of beheer. Een makelaar neemt persoonlijk contact met u op.</span>
-          <span class="ticket"><svg><use href="#i-ticket"></use></svg><span data-i18n="pathATag">U doet automatisch mee aan de wedstrijd</span></span>
+          <span class="d" data-i18n="pathAD">Laat uw gegevens achter en wij contacteren u spoedig.</span>
+          <span class="ticket"><svg><use href="#i-ticket"></use></svg><span data-i18n="pathATag">U doet ook automatisch mee aan de wedstrijd</span></span>
           <span class="arrow"><svg><use href="#i-arrow"></use></svg></span>
         </button>
         <button type="button" class="path" id="go-raffle">
@@ -91,10 +88,10 @@
         <fieldset id="f-interest">
           <legend><span data-i18n="qInterest">Waarmee kunnen we u helpen?</span> <span class="req">*</span></legend>
           <div class="chips">
-            <label class="chip big"><input type="radio" name="interest" value="kopen" id="i-kopen"><span><b data-i18n="iBuy">Kopen</b><small data-i18n="iBuyD">Ik zoek een pand</small></span></label>
-            <label class="chip big"><input type="radio" name="interest" value="verkopen" id="i-verkopen"><span><b data-i18n="iSell">Verkopen</b><small data-i18n="iSellD">Ik wil mijn pand verkopen</small></span></label>
-            <label class="chip big"><input type="radio" name="interest" value="verhuren" id="i-verhuren"><span><b data-i18n="iRent">Verhuren</b><small data-i18n="iRentD">Ik zoek een huurder</small></span></label>
-            <label class="chip big"><input type="radio" name="interest" value="beheer" id="i-beheer"><span><b data-i18n="iManage">Beheer</b><small data-i18n="iManageD">Laat mijn pand beheren</small></span></label>
+            <label class="chip"><input type="checkbox" name="interest" value="kopen" id="i-kopen"><span data-i18n="iBuy">Kopen</span></label>
+            <label class="chip"><input type="checkbox" name="interest" value="verkopen" id="i-verkopen"><span data-i18n="iSell">Verkopen</span></label>
+            <label class="chip"><input type="checkbox" name="interest" value="verhuren" id="i-verhuren"><span data-i18n="iRent">Verhuren</span></label>
+            <label class="chip"><input type="checkbox" name="interest" value="beheer" id="i-beheer"><span data-i18n="iManage">Beheer</span></label>
           </div>
           <div class="err" id="e-interest"></div>
         </fieldset>
@@ -109,38 +106,27 @@
           </div>
         </fieldset>
 
-        <fieldset>
+        <fieldset id="f-property" hidden>
           <legend data-i18n="qProperty">Over het pand</legend>
-          <div class="grid2">
-            <div class="field" id="f-price"><label for="price" id="price-label" data-i18n="priceValue">Prijsklasse *</label><select id="price"><option value="">Kies een prijsklasse…</option><option value="&lt; € 200.000">&lt; € 200.000</option><option value="€ 200.000 – 300.000">€ 200.000 – 300.000</option><option value="€ 300.000 – 400.000">€ 300.000 – 400.000</option><option value="€ 400.000 – 500.000">€ 400.000 – 500.000</option><option value="€ 500.000 – 750.000">€ 500.000 – 750.000</option><option value="€ 750.000 – 1.000.000">€ 750.000 – 1.000.000</option><option value="&gt; € 1.000.000">&gt; € 1.000.000</option></select><input type="text" inputmode="numeric" id="pcount" autocomplete="off" hidden placeholder="Bv. 3"><div class="err" id="e-price"></div></div>
-            <div class="field"><label for="ptype" data-i18n="ptype">Type pand</label>
-              <select id="ptype">
-                <option value="" data-i18n="choose">Kies…</option>
-                <option value="appartement" data-i18n="tApt">Appartement</option>
-                <option value="woning" data-i18n="tHouse">Woning</option>
-                <option value="opbrengsteigendom" data-i18n="tInvest">Opbrengsteigendom</option>
-                <option value="handelspand" data-i18n="tCommercial">Handelspand / kantoor</option>
-                <option value="bouwgrond" data-i18n="tLand">Bouwgrond</option>
-                <option value="garage" data-i18n="tGarage">Garage / parking</option>
-              </select></div>
-            <div class="field"><label for="region" data-i18n="region">Gemeente of regio</label><input type="text" id="region" placeholder="Antwerpen, Berchem, Mortsel…"></div>
-            <div class="field"><label for="timing" data-i18n="timing">Wanneer?</label>
-              <select id="timing">
-                <option value="" data-i18n="choose">Kies…</option>
-                <option value="nu" data-i18n="tNow">Zo snel mogelijk</option>
-                <option value="3m" data-i18n="t3">Binnen 3 maanden</option>
-                <option value="6m" data-i18n="t6">Binnen 6 maanden</option>
-                <option value="later" data-i18n="tLater">Ik oriënteer me nog</option>
-              </select></div>
+          <div class="field" id="f-ptype" hidden>
+            <label data-i18n="ptype">Type pand *</label>
+            <div class="chips" id="ptype-chips">
+              <label class="chip"><input type="checkbox" name="ptype" value="appartement" id="pt-apt"><span data-i18n="tApt">Appartement</span></label>
+              <label class="chip"><input type="checkbox" name="ptype" value="huis" id="pt-huis"><span data-i18n="tHouse">Huis</span></label>
+              <label class="chip"><input type="checkbox" name="ptype" value="opbrengsteigendom" id="pt-invest"><span data-i18n="tInvest">Opbrengsteigendom</span></label>
+            </div>
+            <div class="err" id="e-ptype"></div>
           </div>
+          <div class="grid2">
+            <div class="field" id="f-price" hidden><label for="price" id="price-label" data-i18n="priceValue">Prijsklasse *</label><select id="price"><option value="">Kies een prijsklasse…</option><option value="&lt; € 200.000">&lt; € 200.000</option><option value="€ 200.000 – 300.000">€ 200.000 – 300.000</option><option value="€ 300.000 – 400.000">€ 300.000 – 400.000</option><option value="€ 400.000 – 500.000">€ 400.000 – 500.000</option><option value="€ 500.000 – 750.000">€ 500.000 – 750.000</option><option value="€ 750.000 – 1.000.000">€ 750.000 – 1.000.000</option><option value="&gt; € 1.000.000">&gt; € 1.000.000</option></select><div class="err" id="e-price"></div></div>
+            <div class="field" id="f-pcount" hidden><label for="pcount" id="pcount-label" data-i18n="priceCount">Aantal panden *</label><input type="text" inputmode="numeric" id="pcount" autocomplete="off" placeholder="Bv. 3"><div class="err" id="e-pcount"></div></div>
+            <div class="field" id="f-region" hidden><label for="region" data-i18n="region">Gemeente of regio</label><input type="text" id="region" placeholder="Antwerpen, Berchem, Mortsel…"></div>
+          </div>
+          <input type="hidden" id="timing" value="">
         </fieldset>
 
         <div class="field"><label for="notes" data-i18n="notes">Opmerkingen of vragen</label><textarea id="notes" data-i18n-ph="notesPh" placeholder="Bv. ik zoek een appartement met 2 slaapkamers en terras"></textarea></div>
         <div class="raffle-note"><span class="ic"><svg><use href="#i-cash"></use></svg></span><span data-i18n="autoRaffle">U doet automatisch mee aan de wedstrijd voor een Shabbat-uitje voor twee in Villa Altol.</span></div>
-        <div class="join-box">
-          <label class="consent join"><input type="checkbox" id="sq-join"><span data-i18n="joinQuiz">Ik wil ook de wedstrijdvragen beantwoorden (niet verplicht).</span></label>
-          <div class="quiz" data-prefix="sq" id="sq-quiz" hidden></div>
-        </div>
 
         <div id="f-consent">
           <label class="consent"><input type="checkbox" id="consent"><span data-i18n="consent">Ik geef Immo Spot toestemming om mijn gegevens te bewaren en mij te contacteren over mijn aanvraag. Ik kan dit altijd intrekken.</span></label>
@@ -186,11 +172,7 @@
       <h2 id="thanks-title">Bedankt!</h2>
       <p id="thanks-body"></p>
       <p class="dup-note" id="thanks-dup" hidden></p>
-      <ul class="steps" id="thanks-steps">
-        <li><b>1</b><span data-i18n="step1">Een makelaar bekijkt uw vraag persoonlijk.</span></li>
-        <li><b>2</b><span data-i18n="step2">Binnen 2 werkdagen nemen we contact met u op.</span></li>
-        <li><b>3</b><span data-i18n="step3">Samen plannen we de volgende stap: een schatting, een bezoek of een vrijblijvend gesprek.</span></li>
-      </ul>
+      <ul class="steps" id="thanks-steps" hidden></ul>
       <div class="raffle-note" id="thanks-raffle-box"><span class="ic"><svg><use href="#i-cash"></use></svg></span><span id="thanks-raffle"></span></div>
       <p class="thanks-end" id="thanks-end"></p>
       <button type="button" class="again" id="again" data-i18n="again">Nieuwe inschrijving</button>
