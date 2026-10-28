@@ -41,6 +41,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px
 .prize{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:center;background:var(--forest-deep);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 18px}
 .prize .ic{width:56px;height:56px;border-radius:14px;background:var(--gold);color:var(--forest-deep);display:grid;place-items:center}
 .prize .ic svg{width:34px;height:34px}
+.prize-logo{width:56px;height:auto;display:block;border-radius:12px;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
 .prize b{display:block;font-family:var(--display);font-weight:800;font-size:20px;line-height:1.15}
 .prize small{display:block;color:var(--on-forest-muted);font-size:14.5px;margin-top:2px}
 .services{list-style:none;margin:0;padding:0;display:grid;gap:14px}
