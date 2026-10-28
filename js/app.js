@@ -225,6 +225,8 @@
     const raffleTxt = svc ? t("thanksRaffle") : t("rfRaffle");
     $("thanks-raffle").textContent = raffleTxt || "";
     $("thanks-raffle-box").hidden = !raffleTxt;
+    const flyer = $("thanks-flyer");
+    if (flyer) flyer.hidden = !raffleTxt;
     $("thanks-end").textContent = svc ? t("thanksEnd") : t("rfEnd");
     if (secondsLeft != null) $("countdown").textContent = t("countdown")(secondsLeft);
   }
