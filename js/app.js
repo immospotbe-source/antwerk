@@ -248,4 +248,15 @@
   buildQuiz();
   syncPropertyFields();
   applyLang();
+
+  // Safari/iPad: keep focused fields visible above the keyboard
+  document.addEventListener("focusin", (e) => {
+    const el = e.target;
+    if (!el || !/^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return;
+    if (el.type === "checkbox" || el.type === "radio" || el.type === "hidden") return;
+    setTimeout(() => {
+      try { el.scrollIntoView({ behavior: "smooth", block: "center", inline: "nearest" }); } catch (_) {}
+    }, 350);
+  });
+
 })();
