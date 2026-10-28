@@ -226,7 +226,7 @@
     $("thanks-raffle").textContent = raffleTxt || "";
     $("thanks-raffle-box").hidden = !raffleTxt;
     const flyer = $("thanks-flyer");
-    if (flyer) flyer.hidden = !raffleTxt;
+    if (flyer) flyer.hidden = false; // flyer on both service + contest thank-you
     $("thanks-end").textContent = svc ? t("thanksEnd") : t("rfEnd");
     if (secondsLeft != null) $("countdown").textContent = t("countdown")(secondsLeft);
   }
