@@ -17,7 +17,13 @@
 
   // ---------- views ----------
   const VIEWS = ["v-start", "v-service", "v-raffle", "v-thanks"];
-  function show(id) { VIEWS.forEach(v => { $(v).hidden = v !== id; }); window.scrollTo({ top: 0 }); }
+  function show(id) {
+    VIEWS.forEach(v => { $(v).hidden = v !== id; });
+    const app = document.querySelector(".app");
+    if (app) app.classList.toggle("form-full", id !== "v-start");
+    window.scrollTo({ top: 0 });
+    placeBrandExtras();
+  }
   $("go-service").onclick = () => show("v-service");
   $("go-raffle").onclick = () => show("v-raffle");
   document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", () => { clearErrors(); setNote(""); show("v-start"); }));
