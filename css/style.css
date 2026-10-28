@@ -38,10 +38,10 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px
 .event b{color:var(--on-forest)}
 .brand h1{font-family:var(--display);font-weight:800;font-size:clamp(30px,3.6vw,46px);line-height:1.08;margin:0;text-wrap:balance;letter-spacing:-.015em}
 .brand p.lede{margin:0;color:var(--on-forest-muted);font-size:18px;max-width:36ch}
-.prize{display:grid;grid-template-columns:56px 1fr;gap:14px;align-items:center;background:var(--forest-deep);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 18px}
+.prize{display:grid;grid-template-columns:52px 1fr;gap:12px;align-items:center;background:var(--forest-deep);border:1px solid rgba(255,255,255,.14);border-radius:16px;padding:16px 18px}
 .prize .ic{width:56px;height:56px;border-radius:14px;background:var(--gold);color:var(--forest-deep);display:grid;place-items:center}
 .prize .ic svg{width:34px;height:34px}
-.prize-logo{width:56px;height:auto;display:block;border-radius:12px;background:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+.prize-logo{width:52px;height:auto;display:block;object-fit:contain;background:transparent;border-radius:0;box-shadow:none;align-self:center}
 .prize b{display:block;font-family:var(--display);font-weight:800;font-size:20px;line-height:1.15}
 .prize small{display:block;color:var(--on-forest-muted);font-size:14.5px;margin-top:2px}
 .services{list-style:none;margin:0;padding:0;display:grid;gap:14px}
@@ -77,7 +77,7 @@ body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px
 .path.main{background:var(--forest);border-color:var(--forest);color:#fff}
 .path.main .d{color:var(--on-forest-muted)}
 .path.main .arrow{background:var(--teal);color:var(--forest-deep)}
-.path.main .ticket{background:var(--gold);color:var(--forest-deep)}
+.path.main .ticket{background:var(--gold);color:var(--forest-deep);font-size:14px;font-weight:800;padding:7px 12px;box-shadow:0 2px 0 rgba(0,0,0,.12)}
 .path.main:hover{border-color:var(--teal)}
 
 /* Forms */
@@ -181,3 +181,5 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
 @media (max-width:900px){.brand-foot .doc-links{display:none}}
 .event-row{display:flex;align-items:center;flex-wrap:wrap;gap:12px 14px}
 .antwerk-logo{display:block;width:128px;height:auto;border-radius:9px;box-shadow:0 0 0 1px rgba(255,255,255,.22)}
+
+.thanks-flyer{display:block;width:100%;max-width:420px;height:auto;margin:14px auto 6px;border-radius:14px;border:1px solid rgba(0,82,70,.12);box-shadow:0 8px 24px rgba(0,0,0,.08)}
