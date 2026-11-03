@@ -315,24 +315,24 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
   }
   .brand {
     justify-content: center;
-    gap: 14px;
-    padding: 24px 28px 18px;
+    gap: 18px;
+    padding: 28px 28px 22px;
     overflow: visible;
     flex: none;
   }
   .logo svg {
-    width: 88px;
+    width: 108px;
   }
   .wordmark {
-    font-size: 38px;
+    font-size: 44px;
   }
   .tagline {
-    font-size: 16px;
-    max-width: 30ch;
+    font-size: 17px;
+    max-width: 32ch;
     margin-inline: auto;
   }
   .antwerk-logo {
-    width: 132px;
+    width: 148px;
   }
   .prize {
     padding: 12px 14px;
@@ -698,5 +698,71 @@ input[type=text].hp{position:absolute!important;top:0!important;left:0!important
   }
   .app.portrait-stack > .services {
     padding: 16px 18px 8px;
+  }
+}
+
+/* ===== PREVIEW ONLY (iPad portrait start): taller green, bigger logo, less white =====
+   Not for live push. Phone (≤700) and form-full / brand-compact left intact. */
+@media (min-width: 701px) and (max-width: 1100px) and (orientation: portrait) {
+  /* Start page: give the green brand ~half+ of the viewport */
+  .app.portrait-stack:not(.form-full) {
+    grid-template-rows: minmax(58vh, auto) minmax(0, 1fr) auto;
+  }
+  .app.portrait-stack:not(.form-full) > .brand {
+    padding: 36px 32px 28px;
+    gap: 20px;
+    justify-content: center;
+  }
+  .app.portrait-stack:not(.form-full) > .brand .logo {
+    gap: 12px;
+  }
+  .app.portrait-stack:not(.form-full) > .brand .logo svg {
+    width: 132px;
+  }
+  .app.portrait-stack:not(.form-full) > .brand .wordmark {
+    font-size: 52px;
+    letter-spacing: -0.02em;
+  }
+  .app.portrait-stack:not(.form-full) > .brand .tagline {
+    font-size: 17px;
+    margin-top: 8px;
+  }
+  .app.portrait-stack:not(.form-full) > .brand .prize {
+    margin-top: 4px;
+    padding: 14px 16px;
+  }
+
+  /* Tighten white services | paths bottom so it feels denser */
+  .app.portrait-stack:not(.form-full) > .services {
+    padding: 8px 10px 8px 18px;
+    gap: 12px;
+    align-content: space-evenly;
+  }
+  .app.portrait-stack:not(.form-full) > .services li {
+    gap: 10px;
+  }
+  .app.portrait-stack:not(.form-full) > .panel {
+    padding: 8px 14px 8px 8px;
+    justify-content: stretch;
+  }
+  .app.portrait-stack:not(.form-full) .paths {
+    gap: 8px;
+    height: 100%;
+    grid-template-rows: 1fr 1fr;
+    align-content: stretch;
+  }
+  .app.portrait-stack:not(.form-full) .path {
+    min-height: 0;
+    height: 100%;
+    padding: 12px 14px;
+    align-content: center;
+  }
+  .app.portrait-stack:not(.form-full) > .brand-foot {
+    padding: 10px 20px 16px;
+  }
+
+  /* form-full keeps auto brand row (sticky bar) — already set elsewhere */
+  .app.portrait-stack.form-full {
+    grid-template-rows: auto 1fr auto;
   }
 }
